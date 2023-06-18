@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:noting/constants/colors.dart';
-import 'package:noting/widgets/form_button.dart';
 import 'Views/all_views.dart';
 import 'firebase_options.dart';
 
@@ -52,7 +51,12 @@ class HomePage extends StatelessWidget {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            return const LoginView();
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null && !user.emailVerified) {
+              return const VerifyEmailView();
+            } else {
+              return const LoginView();
+            }
           default:
             return const Text('Not connected');
         }
