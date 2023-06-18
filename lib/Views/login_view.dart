@@ -86,54 +86,58 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.background,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: ListView(
-          children: [
-            const SizedBox(height: 24),
-            TextFormField(
-              controller: _emailController,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                hintText: 'Enter your email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Container(
+        color: AppColors.background,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: ListView(
+            children: [
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _emailController,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.visiblePassword,
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                hintText: 'Enter your password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 16),
+              TextFormField(
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.visiblePassword,
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  hintText: 'Enter your password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            FormButton(
-                text: "Login", isSecondary: false, onPressed: handleLogin),
-            const SizedBox(height: 8),
-            FormButton(
-              isSecondary: true,
-              text: "Create new account",
-              onPressed: () async {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const RegisterView()),
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 24),
+              FormButton(
+                  text: "Login", isSecondary: false, onPressed: handleLogin),
+              const SizedBox(height: 8),
+              FormButton(
+                isSecondary: true,
+                text: "Create new account",
+                onPressed: () async {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/register/',
+                    (route) => false,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
