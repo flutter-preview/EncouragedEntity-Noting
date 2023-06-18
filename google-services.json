@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "195234763877",
+    "project_id": "my-noting",
+    "storage_bucket": "my-noting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195234763877:android:93217bf402325e6201628c",
+        "android_client_info": {
+          "package_name": "com.skytide.noting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "195234763877-ge2k3k4fh0g1c6t88k3ttlmd96cv40li.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARRy8TLWTHIb26nqmZA4H-PE2mnYOiWdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "195234763877-ge2k3k4fh0g1c6t88k3ttlmd96cv40li.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
