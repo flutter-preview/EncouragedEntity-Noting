@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:noting/Views/login_view.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
-import '../firebase_options.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -63,77 +61,58 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Register"),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Container(
-                color: AppColors.background,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: ListView(
-                    children: [
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        controller: _emailController,
-                        autocorrect: false,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'Enter your email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        keyboardType: TextInputType.visiblePassword,
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          hintText: 'Enter your password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      FormButton(
-                        text: "Register",
-                        isSecondary: false,
-                        onPressed: handleRegister,
-                      ),
-                      const SizedBox(height: 8),
-                      FormButton(
-                        isSecondary: true,
-                        text: "Already have an account?",
-                        onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginView()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+    return Container(
+      color: AppColors.background,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: ListView(
+          children: [
+            const SizedBox(height: 24),
+            TextFormField(
+              controller: _emailController,
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                hintText: 'Enter your email',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              );
-            default:
-              return const SplashScreen();
-          }
-        },
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.visiblePassword,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: 'Enter your password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            FormButton(
+              text: "Register",
+              isSecondary: false,
+              onPressed: handleRegister,
+            ),
+            const SizedBox(height: 8),
+            FormButton(
+              isSecondary: true,
+              text: "Already have an account?",
+              onPressed: () async {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const LoginView()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

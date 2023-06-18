@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:noting/constants/colors.dart';
+import 'package:noting/widgets/form_button.dart';
 import 'Views/all_views.dart';
 import 'firebase_options.dart';
 
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("Home"),
       ),
       body: FutureBuilder(
         future: Firebase.initializeApp(
@@ -51,15 +52,45 @@ class HomePage extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              final currentUser = FirebaseAuth.instance.currentUser;
-              final emailVerified = currentUser?.emailVerified ?? false;
-              if (emailVerified) {}
-              return const Text('Connected');
+              // final currentUser = FirebaseAuth.instance.currentUser;
+              // final emailVerified = currentUser?.emailVerified ?? false;
+              // if (emailVerified) {
+              //   return const Text('Connected');
+              // } else {
+              //    return const VerifyEmailView();
+              // }
+              return const LoginView();
             default:
               return const Text('Not connected');
           }
         },
       ),
     );
+  }
+}
+
+class VerifyEmailView extends StatefulWidget {
+  const VerifyEmailView({super.key});
+
+  @override
+  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children: [
+          Text('Please, verify your email!'),
+          FormButton(
+            text: 'Verify',
+            isSecondary: false,
+            onPressed: () async {
+              final currentUser = FirebaseAuth.instance.currentUser;
+              await currentUser?.sendEmailVerification();
+            },
+          )
+        ],
+      );
   }
 }
