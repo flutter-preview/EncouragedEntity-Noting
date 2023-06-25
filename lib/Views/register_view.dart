@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:noting/Views/login_view.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
 
