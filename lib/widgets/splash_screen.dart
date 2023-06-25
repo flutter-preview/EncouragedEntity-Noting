@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noting/Views/login_view.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:noting/main.dart';
 
 import '../constants/colors.dart';
 
@@ -15,12 +16,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      // Check if the widget is still mounted before performing navigation
       if (mounted) {
-        // Navigate to the main application screen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const LoginView()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       }
     });
@@ -28,13 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            CircularProgressIndicator(color: AppColors.primary),
-          ],
+    return Container(
+      color: AppColors.background,
+      child: const Center(
+        child: SpinKitRing(
+          color: AppColors.primary,
+          size: 50,
         ),
       ),
     );

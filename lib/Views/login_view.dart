@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:noting/Views/register_view.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
+import '../main.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -51,6 +51,10 @@ class _LoginViewState extends State<LoginView> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'empty-email') {

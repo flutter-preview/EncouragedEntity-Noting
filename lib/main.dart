@@ -3,8 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:noting/constants/colors.dart';
+import 'package:noting/widgets/all_widgets.dart';
 import 'Views/all_views.dart';
 import 'firebase_options.dart';
+// ignore: unused_import
+import 'dart:developer' as devtools show log;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,13 +55,17 @@ class HomePage extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
-            if (user != null && !user.emailVerified) {
-              return const VerifyEmailView();
+            if (user != null) {
+              if (user.emailVerified) {
+                return const NotesView();
+              } else {
+                return const VerifyEmailView();
+              }
             } else {
               return const LoginView();
             }
           default:
-            return const Text('Not connected');
+            return SplashScreen();
         }
       },
     );
