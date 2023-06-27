@@ -47,11 +47,6 @@ class _LoginViewState extends State<LoginView> {
           message: 'Password cannot be empty',
         );
       }
-
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
       Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.notes,
         (route) => false,

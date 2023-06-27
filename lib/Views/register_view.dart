@@ -38,6 +38,9 @@ class _RegisterViewState extends State<RegisterView> {
         email: email,
         password: password,
       );
+      Navigator.of(context).pushNamed(
+        AppRoutes.mailVerify,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -51,10 +54,23 @@ class _RegisterViewState extends State<RegisterView> {
             content: Text("Email is already in use"),
           ),
         );
+      } else if (e.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Invalid email format"),
+          ),
+        );
+      } else if (e.code == 'operation-not-allowed') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Sign up operation is not allowed"),
+          ),
+        );
       }
     } catch (e) {
       print(e);
     }
+
     _emailController.text = "";
     _passwordController.text = "";
   }

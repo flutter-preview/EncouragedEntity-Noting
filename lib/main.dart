@@ -40,6 +40,7 @@ void main() async {
       AppRoutes.login: (context) => const LoginView(),
       AppRoutes.register: (context) => const RegisterView(),
       AppRoutes.notes: (context) => const NotesView(),
+      AppRoutes.mailVerify: (context) => const VerifyEmailView(),
     },
   ));
 }
