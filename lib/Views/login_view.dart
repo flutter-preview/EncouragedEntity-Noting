@@ -52,10 +52,10 @@ class _LoginViewState extends State<LoginView> {
         email: email,
         password: password,
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/notes/',
+                      (route) => false,
+                    );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'empty-email') {
         ScaffoldMessenger.of(context).showSnackBar(
