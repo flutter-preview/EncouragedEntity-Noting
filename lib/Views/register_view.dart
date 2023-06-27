@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:noting/constants/routes.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
 
@@ -108,7 +109,7 @@ class _RegisterViewState extends State<RegisterView> {
                 text: "Already have an account?",
                 onPressed: () async {
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login/',
+                    AppRoutes.login,
                     (route) => false,
                   );
                 },

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'dart:developer' as devtools show log;
 
+import 'package:noting/constants/routes.dart';
+
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
@@ -27,7 +29,7 @@ class _NotesViewState extends State<NotesView> {
                   if (await showLogOutDialog(context)) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/login/',
+                      AppRoutes.login,
                       (route) => false,
                     );
                   }

@@ -6,6 +6,7 @@ import 'package:noting/constants/colors.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import 'Views/all_views.dart';
 import 'firebase_options.dart';
+import 'constants/routes.dart';
 // ignore: unused_import
 import 'dart:developer' as devtools show log;
 
@@ -36,9 +37,9 @@ void main() async {
     ),
     home: const HomePage(),
     routes: {
-      '/login/': (context) => const LoginView(),
-      '/register/': (context) => const RegisterView(),
-      '/notes/': (context) => const NotesView(),
+      AppRoutes.login: (context) => const LoginView(),
+      AppRoutes.register: (context) => const RegisterView(),
+      AppRoutes.notes: (context) => const NotesView(),
     },
   ));
 }
