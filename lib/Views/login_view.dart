@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:noting/constants/routes.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
-import '../main.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -54,9 +53,9 @@ class _LoginViewState extends State<LoginView> {
         password: password,
       );
       Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.notes,
-                      (route) => false,
-                    );
+        AppRoutes.notes,
+        (route) => false,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'empty-email') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -81,6 +80,12 @@ class _LoginViewState extends State<LoginView> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Wrong password. Try again."),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
           ),
         );
       }
