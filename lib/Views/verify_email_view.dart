@@ -19,8 +19,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       body: Center(
         child: Column(
           children: [
-            const Text('We\'ve sent you verification letter on your email.'),
-            const Text('If you haven\'t recieved your verification letter, please press the button below'),
+            const Text("We've sent you verification letter on your email."),
+            const Text(
+                "\t\tIf you haven't recieved your verification letter, please press the button below"),
             FormButton(
               text: 'Verify',
               isSecondary: false,
@@ -37,7 +38,17 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                   }
                 }
               },
-            )
+            ),
+            TextButton(
+              child: const Text('Restart'),
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.register,
+                  (route) => false,
+                );
+              },
+            ),
           ],
         ),
       ),
