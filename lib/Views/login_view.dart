@@ -47,10 +47,26 @@ class _LoginViewState extends State<LoginView> {
           message: 'Password cannot be empty',
         );
       }
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user?.emailVerified ?? false) {
+        
       Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.notes,
         (route) => false,
       );
+      } else {
+        
+      Navigator.of(context).pushNamed(
+        AppRoutes.mailVerify,
+      );
+      }
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'empty-email') {
         ScaffoldMessenger.of(context).showSnackBar(
