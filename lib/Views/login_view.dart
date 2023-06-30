@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:noting/constants/routes.dart';
+import 'package:noting/services/auth/auth_exception.dart';
+import 'package:noting/services/auth/auth_service.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
 
@@ -28,81 +29,6 @@ class _LoginViewState extends State<LoginView> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  void handleLogin() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-    try {
-      if (email.isEmpty) {
-        throw FirebaseAuthException(
-          code: 'empty-email',
-          message: 'Email cannot be empty',
-        );
-      }
-
-      if (password.isEmpty) {
-        throw FirebaseAuthException(
-          code: 'empty-password',
-          message: 'Password cannot be empty',
-        );
-      }
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user?.emailVerified ?? false) {
-        
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.notes,
-        (route) => false,
-      );
-      } else {
-        
-      Navigator.of(context).pushNamed(
-        AppRoutes.mailVerify,
-      );
-      }
-
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'empty-email') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Email cannot be empty"),
-          ),
-        );
-      } else if (e.code == 'empty-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Password cannot be empty"),
-          ),
-        );
-      } else if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                Text("There is no user with that email. Try to create one"),
-          ),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Wrong password. Try again."),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-          ),
-        );
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -162,5 +88,69 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+
+  void handleLogin() async {
+    final authService = AuthService.firebase();
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    try {
+      if (email.isEmpty) {
+        throw EmptyMailException();
+      }
+
+      if (password.isEmpty) {
+        throw EmptyPasswordException();
+      }
+
+      await authService.logIn(
+        email: email,
+        password: password,
+      );
+
+      final user = authService.currentUser;
+
+      if (user?.isEmailVerified ?? false) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.notes,
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).pushNamed(
+          AppRoutes.mailVerify,
+        );
+      }
+    } on EmptyMailException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Email cannot be empty"),
+        ),
+      );
+    } on EmptyPasswordException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Password cannot be empty"),
+        ),
+      );
+    } on InvalidMailException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("There is no user with that email. Try to create one"),
+        ),
+      );
+    } on WrongPasswordException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Wrong password. Try again."),
+        ),
+      );
+    } on GenericException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Somethind went wrong!"),
+        ),
+      );
+    }
   }
 }
