@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'auth_exception.dart';
 import 'auth_provider.dart';
 import 'auth_user.dart';
@@ -8,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
+
   @override
   Future<AuthUser> createUser({
     required String email,
@@ -32,12 +31,12 @@ class FirebaseAuthProvider implements AuthProvider {
         throw InvalidMailException();
       } else if (e.code == 'operation-not-allowed') {
         throw NotAllowedOperationException();
-      }
-      else
-      {
+      } else {
         throw GenericException();
       }
-    } catch (_) {}
+    } catch (_) {
+      throw GenericException();
+    }
   }
 
   @override
@@ -51,20 +50,57 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<AuthUser> logIn({required String email, required String password}) {
-    // TODO: implement logIn
-    throw UnimplementedError();
+  Future<AuthUser> logIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final user = currentUser;
+      if (user == null) {
+        throw UserNotLoggedInException();
+      }
+      return user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'empty-email') {
+        throw EmptyMailException();
+      } else if (e.code == 'empty-password') {
+        throw EmptyPasswordException();
+      } else if (e.code == 'user-not-found') {
+        throw UserNotFoundException();
+      } else if (e.code == 'wrong-password') {
+        throw WrongPasswordException();
+      } else {
+        throw GenericException();
+      }
+    } catch (_) {
+        throw GenericException();
+    }
   }
 
   @override
-  Future<void> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
+  Future<void> logOut() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if(user != null)
+    {
+      await FirebaseAuth.instance.signOut();
+    }
+    else
+    {
+      throw UserNotLoggedInException();
+    }
   }
 
   @override
-  Future<void> sendEmailVerification() {
-    // TODO: implement sendEmailVerification
-    throw UnimplementedError();
+  Future<void> sendEmailVerification() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.sendEmailVerification();
+    } else {
+      throw UserNotLoggedInException();
+    }
   }
 }

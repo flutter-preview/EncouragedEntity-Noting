@@ -9,6 +9,17 @@ class WrongPasswordException implements Exception
   
 }
 
+class EmptyMailException implements Exception
+{
+
+}
+
+class EmptyPasswordException implements Exception
+{
+  
+}
+
+
 
 //register
 class WeakPasswordException implements Exception
