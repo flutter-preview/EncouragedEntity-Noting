@@ -5,6 +5,8 @@ import 'dart:developer' as devtools show log;
 
 import 'package:noting/constants/routes.dart';
 
+import '../enums/menu_action.dart';
+
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
@@ -12,7 +14,6 @@ class NotesView extends StatefulWidget {
   State<NotesView> createState() => _NotesViewState();
 }
 
-enum MenuAction { logOut }
 
 class _NotesViewState extends State<NotesView> {
   void logOut() {}

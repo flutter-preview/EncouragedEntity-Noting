@@ -43,7 +43,7 @@ void main() async {
       AppRoutes.mailVerify: (context) => const VerifyEmailView(),
     },
   ));
-}
+} 
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
