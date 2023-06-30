@@ -142,13 +142,13 @@ class _LoginViewState extends State<LoginView> {
     } on WrongPasswordException {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Wrong password. Try again."),
+          content: Text("Wrong password. Try again"),
         ),
       );
     } on GenericException {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Somethind went wrong!"),
+          content: Text("Authentication error"),
         ),
       );
     }
