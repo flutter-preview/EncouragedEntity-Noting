@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:noting/constants/routes.dart';
+import 'package:noting/services/auth/auth_exception.dart';
 import 'package:noting/widgets/all_widgets.dart';
 import '../constants/colors.dart';
+import '../services/auth/auth_service.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -31,46 +32,52 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   void handleRegister() async {
+    final authService = AuthService.firebase();
     final email = _emailController.text;
     final password = _passwordController.text;
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await authService.createUser(
         email: email,
         password: password,
       );
-      final user = FirebaseAuth.instance.currentUser;
-      user?.sendEmailVerification();
+      authService.sendEmailVerification();
       Navigator.of(context).pushNamed(
         AppRoutes.mailVerify,
       );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+    } on WeakPasswordException {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Password is too weak"),
           ),
         );
-      } else if (e.code == 'email-already-in-use') {
+    } on EmailIsUsedException
+    {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Email is already in use"),
           ),
         );
-      } else if (e.code == 'invalid-email') {
+    } on InvalidMailException
+    {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Invalid email format"),
           ),
         );
-      } else if (e.code == 'operation-not-allowed') {
+    } on NotAllowedOperationException
+    {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Sign up operation is not allowed"),
           ),
         );
-      }
-    } catch (e) {
-      print(e);
+    } on GenericException
+    {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Registration error"),
+          ),
+        );
     }
 
     _emailController.text = "";
