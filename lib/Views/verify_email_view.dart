@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:noting/services/auth/auth_exception.dart';
+import 'package:noting/services/auth/auth_service.dart';
 
 import '../constants/routes.dart';
 import '../widgets/form_button.dart';
@@ -26,23 +27,20 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               text: 'Verify',
               isSecondary: false,
               onPressed: () async {
-                final currentUser = FirebaseAuth.instance.currentUser;
                 try {
-                  await currentUser?.sendEmailVerification();
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
+                  await AuthService.firebase().sendEmailVerification();
+                } on UserNotFoundException {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRoutes.login,
                       (route) => false,
                     );
-                  }
                 }
               },
             ),
             TextButton(
               child: const Text('Restart'),
               onPressed: () async {
-                await FirebaseAuth.instance.signOut();
+                await AuthService.firebase().logOut();
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   AppRoutes.register,
                   (route) => false,
