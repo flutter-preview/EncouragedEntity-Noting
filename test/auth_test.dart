@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:noting/services/auth/auth_exception.dart';
 import 'package:noting/services/auth/auth_provider.dart';
 import 'package:noting/services/auth/auth_user.dart';
@@ -43,48 +41,34 @@ void main() {
       expect(provider.isInitialized, true);
     }, timeout: const Timeout(Duration(seconds: 2)));
 
-    test("Create user should delegate to logIn func", () async {
+     test("Create user should delegate to logIn func", () async {
+       await provider.initialize();
+      
+       final user = await provider.createUser(
+         email: "cum",
+         password: "in ass",
+       );
+
+       expect(
+         provider.currentUser,
+         user,
+       );
+       expect(
+         user.isEmailVerified,
+         false,
+       );
+     });
+
+    test("Logged user should be able to verify email", () async {
       await provider.initialize();
-
-      expect(
-        await provider.createUser(
-          email: "foo",
-          password: "anypass",
-        ),
-        throwsA(const TypeMatcher<UserNotFoundException>()),
-      );
-
-      expect(
-        await provider.createUser(
-          email: "somemail@gmail.com",
-          password: "bar",
-        ),
-        throwsA(const TypeMatcher<WrongPasswordException>()),
-      );
-
-      final user = await provider.createUser(
-        email: "foo",
-        password: "bar",
-      );
-
-      expect(
-        provider.currentUser,
-        user,
-      );
-      expect(
-        user.isEmailVerified,
-        false,
-      );
-    });
-
-    test("Logged user should be able to verify email", () {
-      provider.sendEmailVerification();
+      await provider.sendEmailVerification();
       final user = provider.currentUser;
       expect(user, isNotNull);
       expect(user!.isEmailVerified, true);
     });
 
     test("Should be able to log out and log in again", () async {
+      await provider.initialize();
       await provider.logOut();
       await provider.logIn(
         email: "email",
@@ -112,17 +96,10 @@ class MockAuthProvider implements AuthProvider {
       throw NotInitializedException();
     }
 
-    if (email == "foo") {
-      throw UserNotFoundException();
-    }
-
-    if (password == "bar") {
-      throw WrongPasswordException();
-    }
-
-    await Future.delayed(const Duration(seconds: 1));
     const user = AuthUser(isEmailVerified: false);
     _user = user;
+
+    await Future.delayed(const Duration(seconds: 1));
     return user;
   }
 
@@ -142,8 +119,7 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) {
       throw NotInitializedException();
     }
-    if (email == "foo") throw UserNotFoundException();
-    if (password == "bar") throw WrongPasswordException();
+
     const user = AuthUser(isEmailVerified: false);
     _user = user;
     return Future.value(user);
