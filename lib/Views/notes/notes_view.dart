@@ -5,7 +5,7 @@ import 'dart:developer' as devtools show log;
 import 'package:noting/constants/routes.dart';
 import 'package:noting/services/auth/auth_service.dart';
 
-import '../enums/menu_action.dart';
+import '../../enums/menu_action.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
